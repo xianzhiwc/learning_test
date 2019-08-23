@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learn.spring.Mybatis.mapper.QueryCustInfo">
+    <resultMap id="CustBaseInfoMap" type="Customer">
+        <result column="cust_id" jdbcType="INTEGER" property="id"></result>
+        <result column="cust_name" jdbcType="VARCHAR" property="name"></result>
+    </resultMap>
+    <select id ="selectCount" resultType = "int">
+        select count(1) from cst_customer
+    </select>
+    <select id ="selectAll" resultType = "Customer">
+        select cust_id as id, cust_name as name,cust_source as source,
+         cust_industry as industry ,cust_phone as telPhone
+         from cst_customer
+    </select>
+    <select id ="selectBaseInfo" resultMap= "CustBaseInfoMap">
+        select cust_id, cust_name from cst_customer
+    </select>
+</mapper>

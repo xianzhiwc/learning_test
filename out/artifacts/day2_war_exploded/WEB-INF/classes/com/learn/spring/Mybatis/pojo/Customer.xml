@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--mybatis-->
+<mapper namespace="pojo">
+    <select id ="listCst" resultType = "Customer">
+        select * from cst_customer
+    </select>
+</mapper>

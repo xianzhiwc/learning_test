@@ -62,17 +62,32 @@ public class RedPacketOperation {
 
     public RedPacket distributeCount(RedPacket redPacket) {
         BigDecimal totalAmt = new BigDecimal(redPacket.getTotalAmt()); //单位：元
-        BigDecimal count = new BigDecimal(redPacket.getCount());
-        List<BigDecimal> redList = new ArrayList<BigDecimal>();
+        int count = redPacket.getCount();  //红包个数
+        List<BigDecimal> redList = new ArrayList<>();
         BigDecimal minAmt = new BigDecimal("1");   //单位:分  方便计算
-        BigDecimal maxAmt = totalAmt.multiply(BigDecimal.valueOf(100))
-                .subtract(minAmt.multiply(count.subtract(BigDecimal.valueOf(1))));  //初始最大值为保证剩余元素都有最小值的前提下的余额
-        for (int i = 0; i < Integer.valueOf(String.valueOf(count)) - 1; i++) {
-            BigDecimal crtAmt = minAmt.add(BigDecimal.valueOf(new Random().nextInt(maxAmt.intValue())));
-            redList.add(crtAmt.divide(BigDecimal.valueOf(100)).setScale(2));
-            maxAmt = maxAmt.subtract(crtAmt).add(minAmt);    //之后每次最大值都为 上次最大值余额+保底最小值（因为不用保证上一个最小值了）
+        BigDecimal maxAmt = totalAmt.multiply(BigDecimal.valueOf(100)).subtract(minAmt);  //初始最大值为保证剩余元素都有最小值的前提下的余额
+        int cutPointCol[] = new int[count-1];
+        for (int i = 0; i < count-1; ) {
+            int cutPoint = new Random().nextInt(Integer.valueOf(String.valueOf(maxAmt)))+1;
+            boolean flag =true;
+            if (cutPointCol[0] != 0){
+                for(int cp:cutPointCol){
+                    flag = Math.abs(cutPoint - cp) > 1 ? true : false;
+                }
+            }
+            if (flag){
+                cutPointCol[i] = cutPoint;
+                i++;
+            }
         }
-        redList.add(maxAmt.divide(BigDecimal.valueOf(100)).setScale(2));
+        Arrays.sort(cutPointCol);
+        redList.add(BigDecimal.valueOf(cutPointCol[0]).divide(BigDecimal.valueOf(100)).setScale(2));
+        for(int j=1;j<count-1;j++){
+            redList.add(BigDecimal.valueOf(cutPointCol[j]-cutPointCol[j-1]).divide(BigDecimal.valueOf(100)).setScale(2));
+        }
+        redList.add(totalAmt.multiply(BigDecimal.valueOf(100))
+                .subtract(BigDecimal.valueOf(cutPointCol[count-2]))
+                .divide(BigDecimal.valueOf(100)).setScale(2));
         redPacket.setDistrbtAmt(redList);
         redPacket.setSendUser(this.usr);
         return redPacket;

@@ -15,9 +15,8 @@ public class Test {
         }
         RedPacketOperation rcv = new RedPacketOperation(rdp);
         for(User u : usrList){
-            new Thread(new rcvThread(u,rcv)).start();
+            new Thread(new RcvThread(u,rcv)).start();
         }
-
        // re.getRedPacket(rdp);
     }
 }

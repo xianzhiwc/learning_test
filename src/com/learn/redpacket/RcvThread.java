@@ -1,9 +1,9 @@
 package com.learn.redpacket;
 
-public class rcvThread implements Runnable {
+public class RcvThread implements Runnable {
     private User usr;
     private RedPacketOperation rdpo;
-    public rcvThread(User usr,RedPacketOperation rdpo){
+    public RcvThread(User usr, RedPacketOperation rdpo){
         this.usr= usr;
         this.rdpo = rdpo;
     }

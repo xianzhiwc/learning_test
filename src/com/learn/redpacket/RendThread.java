@@ -2,9 +2,9 @@ package com.learn.redpacket;
 
 import java.io.IOException;
 
-public class sendThread implements Runnable {
+public class RendThread implements Runnable {
     private User sendusr;
-    public sendThread(User usr){
+    public RendThread(User usr){
         this.sendusr = usr;
     }
     @Override
